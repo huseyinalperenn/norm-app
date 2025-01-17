@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckoutShowRequest extends FormRequest
+class BasketDestroyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,14 @@ class CheckoutShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'checkout' => 'required|exists:checkouts,id,user_id,'.$this->user()->id
+            'basket' => 'required|exists:baskets,id,user_id,'.$this->user()->id
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'checkout' => $this->route('checkout')
+            "basket" => $this->route('basket')
         ]);
     }
 }

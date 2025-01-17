@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BasketDestroyRequest;
 use App\Http\Requests\BasketStoreRequest;
+use App\Http\Requests\BasketUpdateRequest;
 use Illuminate\Http\Request;
 use NormApp\Checkout\Interfaces\BasketServiceInterface;
 
@@ -43,20 +45,20 @@ class BasketController extends Controller
     }
 
     public function update(
-        Request $request,
+        BasketUpdateRequest $request,
         BasketServiceInterface $basketService
     )
     {
-        $basketService->updateQtyById($request->route('basket'), $request->input('qty'));
+        $basketService->updateQtyById($request->input('basket'), $request->input('qty'));
         return redirect()->back();
     }
 
     public function destroy(
-        Request $request,
+        BasketDestroyRequest $request,
         BasketServiceInterface $basketService
     )
     {
-        $basketService->deleteById($request->route('basket'));
+        $basketService->deleteById($request->input('basket'));
         return redirect()->back();
     }
 
