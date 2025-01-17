@@ -1,0 +1,21 @@
+{
+    "name": "norm-app/products",
+    "version": "1.0",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "NormApp\\Products\\": "src/"
+        },
+        "classmap": []
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NormApp\\Products\\ServiceProvider"
+            ]
+        }
+    }
+}
