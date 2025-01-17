@@ -1,0 +1,21 @@
+{
+    "name": "norm-app/shipping",
+    "version": "1.0",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "NormApp\\Shipping\\": "src/"
+        },
+        "classmap": []
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NormApp\\Shipping\\ServiceProvider"
+            ]
+        }
+    }
+}

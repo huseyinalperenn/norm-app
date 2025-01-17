@@ -16,7 +16,12 @@
                             <h5 class="text-muted">₺{{ $product->price }}</h5>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary w-100">Sepete Ekle</button>
+                            <form method="POST" action="{{ route('basket.store') }}">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}"/>
+                                <input type="hidden" name="qty" value="1"/>
+                                <button class="btn btn-primary w-100">Sepete Ekle</button>
+                            </form>
                         </div>
                     </div>
                 </div>
