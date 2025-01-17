@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use NormApp\Products\Models\Product;
+use NormApp\Shipping\Models\Shipping;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Product::factory(10)->create();
+        Shipping::factory(2)->create();
     }
 }

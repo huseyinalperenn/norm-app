@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "626b9e7ddd47fb7eff9aaa53cce0c9ad",
+    "content-hash": "4b5244faa6671fbdddb690d32df5309a",
     "packages": [
         {
             "name": "brick/math",
@@ -2419,6 +2419,87 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.4.0"
             },
             "time": "2024-12-30T11:07:19+00:00"
+        },
+        {
+            "name": "norm-app/checkout",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "modules/Checkout",
+                "reference": "a2bf4405721e0e4d3f42fe6e37ce03492bcadd08"
+            },
+            "require": {
+                "norm-app/products": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NormApp\\Checkout\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NormApp\\Checkout\\": "src/"
+                },
+                "classmap": []
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "norm-app/products",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "modules/Products",
+                "reference": "cb7a200f0ac757c838b16b53406f229cdc8baa17"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NormApp\\Products\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NormApp\\Products\\": "src/"
+                },
+                "classmap": []
+            },
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "norm-app/shipping",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "modules/Shipping",
+                "reference": "10044c135d2f9a3c6168c9e32cc0f39327390334"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NormApp\\Shipping\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NormApp\\Shipping\\": "src/"
+                },
+                "classmap": []
+            },
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "nunomaduro/termwind",

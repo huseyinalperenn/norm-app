@@ -1,0 +1,23 @@
+{
+    "name": "norm-app/checkout",
+    "version": "1.0",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "NormApp\\Checkout\\": "src/"
+        },
+        "classmap": []
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "norm-app/products": "^1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NormApp\\Checkout\\ServiceProvider"
+            ]
+        }
+    }
+}
