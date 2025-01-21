@@ -50,7 +50,7 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('basket.index') }}">Sepetim</a>
+                    <a class="nav-link" href="{{ route('basket.index') }}">Sepetim <span class="badge text-bg-danger" id="basket-count">{{ auth()->user() ? auth()->user()->load(['basket'])->basket->count() : 0 }}</span></a>
                 </li>
             </ul>
         </div>
@@ -71,6 +71,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- MDB -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @stack('scripts')
 </body>
 </html>

@@ -16,7 +16,7 @@
                                         </div>
                                         <hr class="my-4">
                                         @foreach($baskets as $basket)
-                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                            <div class="basket-item row mb-4 d-flex justify-content-between align-items-center" data-id="{{ $basket->id }}">
                                                 <div class="col-md-2 col-lg-2 col-xl-2">
                                                     <img src="https://placehold.co/50x50/lightblue/white?text=test" class="img-fluid rounded-3" alt="Cotton T-shirt">
                                                 </div>
@@ -25,32 +25,22 @@
                                                     <h6 class="mb-0">{{ $basket->product->name }}</h6>
                                                 </div>
                                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                                    <form method="POST" action="{{ route('basket.update', ['basket' => $basket->id]) }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="qty" value="{{ $basket->qty-1 }}"/>
-                                                        <button type="submit" class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                            <i class="fas fa-minus"></i>
-                                                        </button>
-                                                    </form>
-                                                    <input id="form1" min="1" value="{{ $basket->qty }}" type="number" class="form-control form-control-sm" />
-                                                    <form method="POST" action="{{ route('basket.update', ['basket' => $basket->id]) }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="qty" value="{{ $basket->qty+1 }}"/>
-                                                        <button type="submit" class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
-                                                    </form>
+                                                    <button type="submit" data-action="update-qty" class="update-qty btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <input id="form1" min="1" name="qty" value="{{ $basket->qty }}" type="number" class="form-control form-control-sm" />
+                                                    <button type="button" data-action="update-qty" class="update-qty btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
                                                 </div>
                                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                    <h6 class="mb-0">₺{{ $basket->product->price * $basket->qty }}</h6>
+                                                    <h6 class="mb-0 item-price" data-price="{{ $basket->product->price }}">₺{{ $basket->product->price * $basket->qty }}</h6>
                                                 </div>
                                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                     <form method="POST" action="{{ route('basket.destroy', ['basket' => $basket->id]) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn border-0 shadow-0">
+                                                        <button type="button" data-action="clear-basket" class="btn border-0 shadow-0">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     </form>
@@ -64,12 +54,9 @@
                                                     <i class="fas fa-long-arrow-alt-left me-2"></i>Alışverişe Dön</a>
                                             </h6>
                                             <h6 class="mb-0">
-                                                <form method="POST" action="{{ route('basket.destroyAll') }}">
-                                                    @csrf
-                                                    <button type="submit" class="btn">
-                                                        <i class="fas fa-trash me-2"></i>Sepeti boşalt
-                                                    </button>
-                                                </form>
+                                                <button type="button" data-action="clear-basket" class="btn">
+                                                    <i class="fas fa-trash me-2"></i>Sepeti boşalt
+                                                </button>
                                             </h6>
                                         </div>
                                     </div>
@@ -98,3 +85,102 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        $('[data-action="clear-basket"]').click(function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Sepet Silinsin Mi?',
+                text: 'Sepeti silmek istediginize emin misiniz? Sepetinizdeki tüm ürünler silinecek.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet',
+                cancelButtonText: 'Hayır'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = "{{ route('basket.destroy', ['basket' => '_id']) }}";
+                    url = url.replace('_id', $(this).closest('.basket-item').attr('data-id'));
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        dataType: 'json',
+                        data: {
+                            _method: 'delete',
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: 'Sepet Silindi',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'Tamam'
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Hata',
+                                    text: response.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'Tamam'
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Hata',
+                                text: xhr.responseJSON.message,
+                                icon: 'error',
+                                confirmButtonText: 'Tamam'
+                            });
+                        }
+                    });
+                }
+            });
+
+        })
+        $('.update-qty').click(function () {
+            let url = "{{ route('basket.update', ['basket' => '_id']) }}";
+            url = url.replace('_id', $(this).closest('.basket-item').attr('data-id'));
+            const qty = $(this).closest('.basket-item').find('input[name="qty"]').val();
+            const $this = $(this);
+            $.ajax({
+                url: url,
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    _method: 'put',
+                    _token: '{{ csrf_token() }}',
+                    qty: qty
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        let priceItem = $this.closest('.basket-item').find('.item-price');
+                        priceItem.text("₺"+priceItem.data('price')*qty)
+                        Swal.fire({
+                            title: 'Sepet Güncellendi',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'Tamam'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: response.message,
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Hata',
+                        text: xhr.responseJSON.message,
+                        icon: 'error',
+                        confirmButtonText: 'Tamam'
+                    });
+                }
+            })
+        });
+    </script>
+@endpush

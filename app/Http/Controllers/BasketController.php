@@ -32,12 +32,13 @@ class BasketController extends Controller
                 'qty' => $request->input('qty')
             ]);
 
-            return redirect()->route('basket.index')->with([
+            return response()->json([
                 'status' => 'success',
-                'message' => 'Ürün sepete başarıyla eklendi!'
+                'message' => 'Ürün sepete başarıyla eklendi!',
+                'count' => auth()->user()->load(['basket'])->basket->count()
             ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with([
+            return response()->json([
                 'status' => 'error',
                 'message' => 'Ürün sepete eklenemedi!'
             ]);
@@ -49,8 +50,19 @@ class BasketController extends Controller
         BasketServiceInterface $basketService
     )
     {
-        $basketService->updateQtyById($request->input('basket'), $request->input('qty'));
-        return redirect()->back();
+        try {
+            $basketService->updateQtyById($request->input('basket'), $request->input('qty'));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Sepet başarıyla güncellendi!',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Sepet güncellenirken bir hata oluştu!'
+            ]);
+        }
     }
 
     public function destroy(
