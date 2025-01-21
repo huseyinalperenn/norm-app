@@ -26,15 +26,33 @@ Anasayfada önceden dummy data oluşturulmuş ürünler listelenir. Kullanıcı 
 
 ```bash
 docker run --rm \
-    --pull=always \
-    -v "$(pwd)":/opt \
-    -w /opt \
-    laravelsail/php84-composer:latest \
-    bash -c "laravel new norm-app --no-interaction"
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+```bash
+cp .env.example .env
+```
+
+### .env database bilgileri
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 ```
 
 ```bash
 ./vendor/bin/sail up -d
+```
+
+```bash
+./vendor/bin/sail artisan key:generate
 ```
 
 ```bash
